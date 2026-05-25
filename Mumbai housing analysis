@@ -1,0 +1,73 @@
+import pandas as pd
+import numpy as np
+from pandas.io.sas.sas_constants import column_name_text_subheader_length
+
+df=pd.read_csv('C:\\Users\\Barsha\\Downloads\\new mumbai dataset.csv')
+print(df.head())
+print(df.describe())
+
+# room number distribution across mumbai
+import matplotlib.pyplot as plt
+# average price by location
+average_price=df.groupby('location')['price_rupees'].mean()
+print('Average price by location ')
+print(average_price.sort_values(ascending=False))
+plt.figure(figsize=(10,8))
+average_price.plot(kind='barh',color='orange')
+plt.title("average prices by location")
+plt.xlabel("average prices")
+plt.ylabel("location")
+plt.show()
+
+#most common BHK
+bhk_count=df['room_type'].value_counts()
+print('BHK count')
+print(bhk_count)
+most_common_bhk=df['room_type'].mode()[0]
+print('most common bhk:',most_common_bhk)
+#pie char for room type
+df['room_type'].value_counts().plot(kind='pie',autopct='%1.1f%%')
+plt.ylabel('')
+plt.title("BHK distribution")
+plt.show()
+
+#Average price by BHK
+bhk_price=df.groupby('room_type')['price_rupees'].mean()
+print('Average price by BHK')
+print(bhk_price)
+
+#locations by property count
+location=df['location'].value_counts()
+print('locations by property count')
+print(location)
+
+location.head(10).plot(kind='bar',color='pink')
+plt.title('locations by property count')
+plt.xlabel("property count")
+plt.ylabel("location")
+plt.show()
+# facing direction
+facing=df['facing'].value_counts()
+print('facing direction analysis')
+print(facing)
+# price distribution category
+def category(price):
+     if price < 2:
+         return"Budget"
+     elif price < 5:
+         return "Mid segment"
+     elif price < 10:
+         return "Premium"
+     elif price < 20:
+         return "Luxury"
+
+df['Price category'] = df['price'].apply(category)
+print('price distribution category and count')
+print(df['Price category'])
+print(df['Price category'].value_counts())
+
+# pie chart of price category
+df['Price category'].value_counts().plot(kind='pie',autopct='%1.1f%%')
+plt.ylabel('')
+plt.title("Price category distribution")
+plt.show()
